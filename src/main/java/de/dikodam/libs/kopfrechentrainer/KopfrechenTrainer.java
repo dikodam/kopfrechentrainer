@@ -7,10 +7,10 @@ public class KopfrechenTrainer {
     private int maxStellenanzahl1;
     private int maxStellenanzahl2;
 
-    private boolean plusErlaubt;
-    private boolean minusErlaubt;
-    private boolean malErlaubt;
-    private boolean geteiltErlaubt;
+    private boolean plusRechnen;
+    private boolean minusRechnen;
+    private boolean malRechnen;
+    private boolean geteiltRechnen;
 
 
     public KopfrechenTrainer() {
@@ -18,6 +18,11 @@ public class KopfrechenTrainer {
         minStellenanzahl2 = 1;
         maxStellenanzahl1 = 2;
         maxStellenanzahl2 = 2;
+
+        plusRechnen = true;
+        minusRechnen = false;
+        malRechnen = false;
+        geteiltRechnen = false;
     }
 
     public int getMinStellenanzahl1() {
@@ -25,7 +30,13 @@ public class KopfrechenTrainer {
     }
 
     public void setMinStellenanzahl1(int minStellenanzahl1) {
+        if (minStellenanzahl1 <= 0) {
+            throw new IllegalArgumentException("Minimale Stellenanzahl (Argument 1) muss mindestens 1 sein!");
+        }
         this.minStellenanzahl1 = minStellenanzahl1;
+        if (maxStellenanzahl1 < minStellenanzahl1) {
+            maxStellenanzahl1 = minStellenanzahl1;
+        }
     }
 
     public int getMinStellenanzahl2() {
@@ -33,7 +44,13 @@ public class KopfrechenTrainer {
     }
 
     public void setMinStellenanzahl2(int minStellenanzahl2) {
+        if (minStellenanzahl2 <= 0) {
+            throw new IllegalArgumentException("Minimale Stellenanzahl (Argument 2) muss mindestens 1 sein!");
+        }
         this.minStellenanzahl2 = minStellenanzahl2;
+        if (maxStellenanzahl2 < minStellenanzahl2) {
+            maxStellenanzahl2 = minStellenanzahl2;
+        }
     }
 
     public int getMaxStellenanzahl1() {
@@ -41,7 +58,15 @@ public class KopfrechenTrainer {
     }
 
     public void setMaxStellenanzahl1(int maxStellenanzahl1) {
+        if (maxStellenanzahl1 <= 0) {
+            throw new IllegalArgumentException("Die maximale Stellenanzahl (Argument 1) muss mindestens 1 sein!");
+        }
+
         this.maxStellenanzahl1 = maxStellenanzahl1;
+
+        if (minStellenanzahl1 > maxStellenanzahl1) {
+            minStellenanzahl1 = maxStellenanzahl1;
+        }
     }
 
     public int getMaxStellenanzahl2() {
@@ -49,43 +74,47 @@ public class KopfrechenTrainer {
     }
 
     public void setMaxStellenanzahl2(int maxStellenanzahl2) {
+        if(maxStellenanzahl2 <= 0) {
+            throw new IllegalArgumentException("Die maximale Stellenanzahl (Argument 2) muss mindestens 1 sein!");
+        }
+
         this.maxStellenanzahl2 = maxStellenanzahl2;
+
+        if (minStellenanzahl2 > maxStellenanzahl2) {
+            minStellenanzahl2 = maxStellenanzahl2;
+        }
     }
 
-    public boolean isPlusErlaubt() {
-        return plusErlaubt;
+    public boolean isPlusRechnen() {
+        return plusRechnen;
     }
 
-    public void setPlusErlaubt(boolean plusErlaubt) {
-        this.plusErlaubt = plusErlaubt;
+    public void setPlusRechnen(boolean plusRechnen) {
+        this.plusRechnen = plusRechnen;
     }
 
-    public boolean isMinusErlaubt() {
-        return minusErlaubt;
+    public boolean isMinusRechnen() {
+        return minusRechnen;
     }
 
-    public void setMinusErlaubt(boolean minusErlaubt) {
-        this.minusErlaubt = minusErlaubt;
+    public void setMinusRechnen(boolean minusRechnen) {
+        this.minusRechnen = minusRechnen;
     }
 
-    public boolean isMalErlaubt() {
-        return malErlaubt;
+    public boolean isMalRechnen() {
+        return malRechnen;
     }
 
-    public void setMalErlaubt(boolean malErlaubt) {
-        this.malErlaubt = malErlaubt;
+    public void setMalRechnen(boolean malRechnen) {
+        this.malRechnen = malRechnen;
     }
 
-    public boolean isGeteiltErlaubt() {
-        return geteiltErlaubt;
+    public boolean isGeteiltRechnen() {
+        return geteiltRechnen;
     }
 
-    public void setGeteiltErlaubt(boolean geteiltErlaubt) {
-        this.geteiltErlaubt = geteiltErlaubt;
-    }
-
-    public int drei () {
-        return 3;
+    public void setGeteiltRechnen(boolean geteiltRechnen) {
+        this.geteiltRechnen = geteiltRechnen;
     }
 
 
