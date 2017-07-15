@@ -2,6 +2,7 @@ package de.dikodam.libs.kopfrechentrainer;
 
 import java.util.function.BinaryOperator;
 
+@FunctionalInterface
 public interface ArithmeticOperation extends BinaryOperator<Integer> {
     ArithmeticOperation ADDITION = (a, b) -> a + b;
     ArithmeticOperation SUBTRAKTION = (a, b) -> a - b;
