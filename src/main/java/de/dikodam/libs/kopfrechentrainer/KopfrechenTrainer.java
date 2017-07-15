@@ -140,5 +140,8 @@ public class KopfrechenTrainer {
         this.divisionRechnen = divisionRechnen;
     }
 
+    public Aufgabe produceAufgabe() {
+        return new Aufgabe();
+    }
 
 }

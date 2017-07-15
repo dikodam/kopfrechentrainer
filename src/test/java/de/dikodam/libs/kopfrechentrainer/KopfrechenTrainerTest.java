@@ -2,6 +2,7 @@ package de.dikodam.libs.kopfrechentrainer;
 
 import mockit.Deencapsulation;
 import mockit.Tested;
+import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -21,7 +22,7 @@ public class KopfrechenTrainerTest {
     private KopfrechenTrainer tested;
 
     @Test
-    public void defaultConstructor() {
+    public void defaultConstructor() throws Exception {
         assertThat(tested.getMinStellenanzahl1(), is(1));
         assertThat(tested.getMinStellenanzahl2(), is(1));
         assertThat(tested.getMaxStellenanzahl1(), is(2));
@@ -232,7 +233,7 @@ public class KopfrechenTrainerTest {
     }
 
     @Test
-    public void operationen() {
+    public void operationen() throws Exception {
         BinaryOperator<Integer> addition = Deencapsulation.getField(KopfrechenTrainer.class, "ADDITION");
         BinaryOperator<Integer> subtraktion = Deencapsulation.getField(KopfrechenTrainer.class, "SUBTRAKTION");
         BinaryOperator<Integer> multiplikation = Deencapsulation.getField(KopfrechenTrainer.class, "MULTIPLIKATION");
@@ -244,10 +245,15 @@ public class KopfrechenTrainerTest {
         assertThat(division.apply(12, 3), is(4));
     }
 
-//    @Test
-    //  public void go() throws Exception{
-    //  expectedException.expect(IllegalStateException.class);
+  //  @Test
+    //public void produceAufgabe() throws Exception {
     //  // Fehlkonfiguration
-    //}
+    //  expectedException.expect(IllegalStateException.class);
+//    }
+
+    @Test
+    public void produceAufgabe() {
+        Assert.fail("not implemented");
+    }
 
 }
