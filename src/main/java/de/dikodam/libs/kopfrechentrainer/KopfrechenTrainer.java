@@ -1,24 +1,20 @@
 package de.dikodam.libs.kopfrechentrainer;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.BinaryOperator;
+
+import static de.dikodam.libs.kopfrechentrainer.Operation.*;
 
 public class KopfrechenTrainer {
 
-    private static final BinaryOperator<Integer> ADDITION = (a, b) -> a + b;
-    private static final BinaryOperator<Integer> SUBTRAKTION = (a, b) -> a - b;
-    private static final BinaryOperator<Integer> MULTIPLIKATION = (a, b) -> a * b;
-    private static final BinaryOperator<Integer> DIVISION = (a, b) -> a / b;
+
+    private static Map<BinaryOperator<Integer>, Boolean> erlaubteOperationen;
 
     private int minStellenanzahl1;
     private int minStellenanzahl2;
     private int maxStellenanzahl1;
     private int maxStellenanzahl2;
-
-    private boolean additionRechnen;
-    private boolean subtraktionRechnen;
-    private boolean multiplikationRechnen;
-    private boolean divisionRechnen;
-
 
     public KopfrechenTrainer() {
         minStellenanzahl1 = 1;
@@ -26,10 +22,11 @@ public class KopfrechenTrainer {
         maxStellenanzahl1 = 2;
         maxStellenanzahl2 = 2;
 
-        additionRechnen = true;
-        subtraktionRechnen = false;
-        multiplikationRechnen = false;
-        divisionRechnen = false;
+        erlaubteOperationen = new HashMap<>();
+        erlaubteOperationen.put(ADDITION, true);
+        erlaubteOperationen.put(SUBTRAKTION, false);
+        erlaubteOperationen.put(MULTIPLIKATION, false);
+        erlaubteOperationen.put(DIVISION, false);
     }
 
     public int getMinStellenanzahl1() {
@@ -108,40 +105,46 @@ public class KopfrechenTrainer {
         }
     }
 
-    public boolean isAdditionRechnen() {
-        return additionRechnen;
+    public boolean isAdditionErlaubt() {
+        return erlaubteOperationen.get(ADDITION);
     }
 
-    public void setAdditionRechnen(boolean additionRechnen) {
-        this.additionRechnen = additionRechnen;
+    public void setAdditionErlaubt(boolean additionErlaubt) {
+        erlaubteOperationen.put(ADDITION, additionErlaubt);
     }
 
-    public boolean isSubtraktionRechnen() {
-        return subtraktionRechnen;
+    public boolean isSubtraktionErlaubt() {
+        return erlaubteOperationen.get(SUBTRAKTION);
     }
 
-    public void setSubtraktionRechnen(boolean subtraktionRechnen) {
-        this.subtraktionRechnen = subtraktionRechnen;
+    public void setSubtraktionErlaubt(boolean subtraktionErlaubt) {
+        erlaubteOperationen.put(SUBTRAKTION, subtraktionErlaubt);
     }
 
-    public boolean isMultiplikationRechnen() {
-        return multiplikationRechnen;
+    public boolean isMultiplikationErlaubt() {
+        return erlaubteOperationen.get(MULTIPLIKATION);
     }
 
-    public void setMultiplikationRechnen(boolean multiplikationRechnen) {
-        this.multiplikationRechnen = multiplikationRechnen;
+    public void setMultiplikationErlaubt(boolean multiplikationErlaubt) {
+        erlaubteOperationen.put(MULTIPLIKATION, multiplikationErlaubt);
     }
 
-    public boolean isDivisionRechnen() {
-        return divisionRechnen;
+    public boolean isDivisionErlaubt() {
+        return erlaubteOperationen.get(DIVISION);
     }
 
-    public void setDivisionRechnen(boolean divisionRechnen) {
-        this.divisionRechnen = divisionRechnen;
+    public void setDivisionErlaubt(boolean divisionErlaubt) {
+        erlaubteOperationen.put(DIVISION, divisionErlaubt);
     }
 
     public Aufgabe produceAufgabe() {
-        return new Aufgabe();
+
+        return new Aufgabe(1, 2, randomOperation());
+    }
+
+    private BinaryOperator<Integer> randomOperation() {
+
+        return null;
     }
 
 }

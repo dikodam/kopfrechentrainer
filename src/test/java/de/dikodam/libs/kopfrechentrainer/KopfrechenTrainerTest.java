@@ -7,9 +7,11 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
+import java.util.Map;
 import java.util.function.BinaryOperator;
 import java.util.function.Consumer;
 
+import static de.dikodam.libs.kopfrechentrainer.Operation.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
@@ -27,10 +29,10 @@ public class KopfrechenTrainerTest {
         assertThat(tested.getMinStellenanzahl2(), is(1));
         assertThat(tested.getMaxStellenanzahl1(), is(2));
         assertThat(tested.getMaxStellenanzahl2(), is(2));
-        assertThat(tested.isAdditionRechnen(), is(true));
-        assertThat(tested.isSubtraktionRechnen(), is(false));
-        assertThat(tested.isMultiplikationRechnen(), is(false));
-        assertThat(tested.isDivisionRechnen(), is(false));
+        assertThat(tested.isAdditionErlaubt(), is(true));
+        assertThat(tested.isSubtraktionErlaubt(), is(false));
+        assertThat(tested.isMultiplikationErlaubt(), is(false));
+        assertThat(tested.isDivisionErlaubt(), is(false));
     }
 
     private void testMinMaxStellenanzahlAendern(String nameMinFeld, String nameMaxFeld, int minStellenVorher, int maxStellenVorher,
@@ -184,68 +186,50 @@ public class KopfrechenTrainerTest {
     }
 
     @Test
-    public void setPlusRechnenTrue() throws Exception {
-        String feldName = "additionRechnen";
-        Deencapsulation.setField(tested, feldName, false);
+    public void setAdditionErlaubt() throws Exception {
+        Map<BinaryOperator<Integer>, Boolean> erlaubteOperationen = Deencapsulation.getField(tested, "erlaubteOperationen");
 
-        tested.setAdditionRechnen(true);
-        assertThat(Deencapsulation.getField(tested, feldName), is(true));
+        tested.setAdditionErlaubt(true);
+        assertThat(erlaubteOperationen.get(ADDITION), is(true));
 
-        tested.setAdditionRechnen(false);
-        assertThat(Deencapsulation.getField(tested, feldName), is(false));
+        tested.setAdditionErlaubt(false);
+        assertThat(erlaubteOperationen.get(ADDITION), is(false));
     }
 
 
     @Test
-    public void setMinusRechnen() throws Exception {
-        String feldName = "subtraktionRechnen";
-        Deencapsulation.setField(tested, feldName, false);
+    public void setSubtraktionErlaubt() throws Exception {
+        Map<BinaryOperator<Integer>, Boolean> erlaubteOperationen = Deencapsulation.getField(tested, "erlaubteOperationen");
 
-        tested.setSubtraktionRechnen(true);
-        assertThat(Deencapsulation.getField(tested, feldName), is(true));
+        tested.setSubtraktionErlaubt(true);
+        assertThat(erlaubteOperationen.get(SUBTRAKTION), is(true));
 
-        tested.setSubtraktionRechnen(false);
-        assertThat(Deencapsulation.getField(tested, feldName), is(false));
+        tested.setSubtraktionErlaubt(false);
+        assertThat(erlaubteOperationen.get(SUBTRAKTION), is(false));
     }
 
     @Test
-    public void setMalRechnen() throws Exception {
-        String feldName = "multiplikationRechnen";
-        Deencapsulation.setField(tested, feldName, false);
+    public void setMultiplikationErlaubt() throws Exception {
+        Map<BinaryOperator<Integer>, Boolean> erlaubteOperationen = Deencapsulation.getField(tested, "erlaubteOperationen");
+        tested.setMultiplikationErlaubt(true);
+        assertThat(erlaubteOperationen.get(MULTIPLIKATION), is(true));
 
-        tested.setMultiplikationRechnen(true);
-        assertThat(Deencapsulation.getField(tested, feldName), is(true));
-
-        tested.setMultiplikationRechnen(false);
-        assertThat(Deencapsulation.getField(tested, feldName), is(false));
+        tested.setMultiplikationErlaubt(false);
+        assertThat(erlaubteOperationen.get(MULTIPLIKATION), is(false));
     }
 
     @Test
-    public void setGeteiltErlaubt() throws Exception {
-        String feldName = "divisionRechnen";
-        Deencapsulation.setField(tested, feldName, false);
+    public void setDivisionErlaubt() throws Exception {
+        Map<BinaryOperator<Integer>, Boolean> erlaubteOperationen = Deencapsulation.getField(tested, "erlaubteOperationen");
 
-        tested.setDivisionRechnen(true);
-        assertThat(Deencapsulation.getField(tested, feldName), is(true));
+        tested.setDivisionErlaubt(true);
+        assertThat(erlaubteOperationen.get(DIVISION), is(true));
 
-        tested.setDivisionRechnen(false);
-        assertThat(Deencapsulation.getField(tested, feldName), is(false));
+        tested.setDivisionErlaubt(false);
+        assertThat(erlaubteOperationen.get(DIVISION), is(false));
     }
 
-    @Test
-    public void operationen() throws Exception {
-        BinaryOperator<Integer> addition = Deencapsulation.getField(KopfrechenTrainer.class, "ADDITION");
-        BinaryOperator<Integer> subtraktion = Deencapsulation.getField(KopfrechenTrainer.class, "SUBTRAKTION");
-        BinaryOperator<Integer> multiplikation = Deencapsulation.getField(KopfrechenTrainer.class, "MULTIPLIKATION");
-        BinaryOperator<Integer> division = Deencapsulation.getField(KopfrechenTrainer.class, "DIVISION");
-
-        assertThat(addition.apply(1, 2), is(3));
-        assertThat(subtraktion.apply(1, 2), is(-1));
-        assertThat(multiplikation.apply(3, 4), is(12));
-        assertThat(division.apply(12, 3), is(4));
-    }
-
-  //  @Test
+    //  @Test
     //public void produceAufgabe() throws Exception {
     //  // Fehlkonfiguration
     //  expectedException.expect(IllegalStateException.class);
