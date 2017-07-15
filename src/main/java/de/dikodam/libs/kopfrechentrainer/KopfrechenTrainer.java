@@ -2,14 +2,13 @@ package de.dikodam.libs.kopfrechentrainer;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.function.BinaryOperator;
 
-import static de.dikodam.libs.kopfrechentrainer.Operation.*;
+import static de.dikodam.libs.kopfrechentrainer.ArithmeticOperation.*;
 
 public class KopfrechenTrainer {
 
 
-    private static Map<BinaryOperator<Integer>, Boolean> erlaubteOperationen;
+    private static Map<ArithmeticOperation, Boolean> erlaubteOperationen;
 
     private int minStellenanzahl1;
     private int minStellenanzahl2;
@@ -142,7 +141,7 @@ public class KopfrechenTrainer {
         return new Aufgabe(1, 2, randomOperation());
     }
 
-    private BinaryOperator<Integer> randomOperation() {
+    private ArithmeticOperation randomOperation() {
 
         return null;
     }

@@ -11,7 +11,7 @@ import java.util.Map;
 import java.util.function.BinaryOperator;
 import java.util.function.Consumer;
 
-import static de.dikodam.libs.kopfrechentrainer.Operation.*;
+import static de.dikodam.libs.kopfrechentrainer.ArithmeticOperation.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
@@ -237,6 +237,11 @@ public class KopfrechenTrainerTest {
 
     @Test
     public void produceAufgabe() {
+        Assert.fail("not implemented");
+    }
+
+    @Test
+    public void randomOperation() {
         Assert.fail("not implemented");
     }
 

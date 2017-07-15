@@ -1,16 +1,12 @@
 package de.dikodam.libs.kopfrechentrainer;
 
-import mockit.Tested;
 import org.junit.Test;
 
-import static de.dikodam.libs.kopfrechentrainer.Operation.*;
+import static de.dikodam.libs.kopfrechentrainer.ArithmeticOperation.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
-public class OperationTest {
-
-    @Tested
-    private Operation tested;
+public class ArithmeticOperationTest {
 
     @Test
     public void operationen() throws Exception {

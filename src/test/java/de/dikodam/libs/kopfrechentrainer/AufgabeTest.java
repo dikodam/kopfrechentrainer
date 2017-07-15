@@ -23,7 +23,7 @@ public class AufgabeTest {
 
     @Before
     public void setUp() {
-        tested = new Aufgabe(6, 3, Operation.ADDITION);
+        tested = new Aufgabe(6, 3, ArithmeticOperation.ADDITION);
     }
 
     @Test
@@ -35,7 +35,7 @@ public class AufgabeTest {
 
         assertThat(erstesArgument, is(6));
         assertThat(zweitesArgument, is(3));
-        assertThat(operator, is(Operation.ADDITION));
+        assertThat(operator, is(ArithmeticOperation.ADDITION));
         assertThat(gerateneLoesung, is(nullValue()));
     }
 
