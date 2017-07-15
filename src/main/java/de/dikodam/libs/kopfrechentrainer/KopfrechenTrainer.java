@@ -1,14 +1,16 @@
 package de.dikodam.libs.kopfrechentrainer;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.Collectors;
 
 import static de.dikodam.libs.kopfrechentrainer.ArithmeticOperation.*;
 
 public class KopfrechenTrainer {
 
-
-    private static Map<ArithmeticOperation, Boolean> erlaubteOperationen;
+    private Map<ArithmeticOperation, Boolean> erlaubteOperationen;
 
     private int minStellenanzahl1;
     private int minStellenanzahl2;
@@ -137,13 +139,25 @@ public class KopfrechenTrainer {
     }
 
     public Aufgabe produceAufgabe() {
-
-        return new Aufgabe(1, 2, randomOperation());
+        // TODO nur ganzzahlige division
+        ThreadLocalRandom rand = ThreadLocalRandom.current();
+        int erstesArgument = rand.nextInt((int) Math.pow(10, minStellenanzahl1 - 1), (int) Math.pow(10, maxStellenanzahl1));
+        int zweitesArgument = rand.nextInt((int) Math.pow(10, minStellenanzahl2 - 1), (int) Math.pow(10, maxStellenanzahl2));
+        return new Aufgabe(erstesArgument, zweitesArgument, randomOperation());
     }
 
     private ArithmeticOperation randomOperation() {
-
-        return null;
+        List<ArithmeticOperation> erlaubteOps = erlaubteOperationen
+            .entrySet()
+            .stream()
+            .filter(Map.Entry::getValue)
+            .map(Map.Entry::getKey)
+            .collect(Collectors.toList());
+        if (erlaubteOps.isEmpty()) {
+            throw new IllegalStateException("Keine Rechenoperation erlaubt!");
+        }
+        return erlaubteOps.get(ThreadLocalRandom.current()
+            .nextInt(erlaubteOps.size()));
     }
 
 }

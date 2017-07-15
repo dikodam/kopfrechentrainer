@@ -1,8 +1,8 @@
 package de.dikodam.libs.kopfrechentrainer;
 
 import mockit.Deencapsulation;
+import mockit.Expectations;
 import mockit.Tested;
-import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -10,10 +10,12 @@ import org.junit.rules.ExpectedException;
 import java.util.Map;
 import java.util.function.BinaryOperator;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 import static de.dikodam.libs.kopfrechentrainer.ArithmeticOperation.*;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.*;
 
 public class KopfrechenTrainerTest {
 
@@ -229,20 +231,80 @@ public class KopfrechenTrainerTest {
         assertThat(erlaubteOperationen.get(DIVISION), is(false));
     }
 
-    //  @Test
-    //public void produceAufgabe() throws Exception {
-    //  // Fehlkonfiguration
-    //  expectedException.expect(IllegalStateException.class);
-//    }
-
     @Test
     public void produceAufgabe() {
-        Assert.fail("not implemented");
+        new Expectations(tested) {
+            {
+                Deencapsulation.invoke(tested, "randomOperation");
+                result = SUBTRAKTION;
+            }
+        };
+
+        Deencapsulation.setField(tested, "minStellenanzahl1", 3);
+        Deencapsulation.setField(tested, "maxStellenanzahl1", 4);
+        Deencapsulation.setField(tested, "minStellenanzahl2", 2);
+        Deencapsulation.setField(tested, "maxStellenanzahl2", 3);
+
+
+        Aufgabe result = tested.produceAufgabe();
+        Integer resultArg1 = Deencapsulation.getField(result, "erstesArgument");
+        assertThat(resultArg1, allOf(is(greaterThanOrEqualTo(100)), is(lessThanOrEqualTo(9999))));
+
+        Integer resultArg2 = Deencapsulation.getField(result, "zweitesArgument");
+        assertThat(resultArg2, allOf(is(greaterThanOrEqualTo(10)), is(lessThanOrEqualTo(999))));
+
+        ArithmeticOperation resultOperation = Deencapsulation.getField(result, "operator");
+        assertThat(resultOperation, is(SUBTRAKTION));
     }
 
     @Test
     public void randomOperation() {
-        Assert.fail("not implemented");
+        Supplier<ArithmeticOperation> testedMethod = () -> Deencapsulation.invoke(tested, "randomOperation");
+        Consumer<ArithmeticOperation> validateAdditionAndDivision = result -> assertThat(result,
+            anyOf(is(ADDITION), is(DIVISION)));
+        Consumer<ArithmeticOperation> validateAdditionAndSubtraktion = result -> assertThat(result,
+            anyOf(is(ADDITION), is(SUBTRAKTION)));
+
+        // noob toStrings of lambdas for debugging purposes :S
+        /*
+            System.out.println("ADDITION: " + ADDITION);
+            System.out.println("SUBTRAKTION: " + SUBTRAKTION);
+            System.out.println("MULTIPLIKATION: " + MULTIPLIKATION);
+            System.out.println("DIVISION: " + DIVISION);
+        */
+        // 1. Test
+        Map<ArithmeticOperation, Boolean> erlaubteOperationen = Deencapsulation.getField(tested, "erlaubteOperationen");
+        erlaubteOperationen.clear();
+        erlaubteOperationen.put(ADDITION, true);
+        erlaubteOperationen.put(SUBTRAKTION, false);
+        erlaubteOperationen.put(MULTIPLIKATION, false);
+        erlaubteOperationen.put(DIVISION, true);
+
+        Stream.generate(testedMethod)
+            .limit(100)
+            .forEach(validateAdditionAndDivision);
+
+        // 2. Test
+        erlaubteOperationen.clear();
+        erlaubteOperationen.put(ADDITION, true);
+        erlaubteOperationen.put(SUBTRAKTION, true);
+        erlaubteOperationen.put(MULTIPLIKATION, false);
+        erlaubteOperationen.put(DIVISION, false);
+
+        Stream.generate(testedMethod)
+            .limit(100)
+            .forEach(validateAdditionAndSubtraktion);
+    }
+
+    @Test
+    public void randomOperationKeineErlaubtException() {
+        expectedException.expect(IllegalStateException.class);
+        expectedException.expectMessage("Keine Rechenoperation erlaubt!");
+
+        Map<ArithmeticOperation, Boolean> erlaubteOperationen = Deencapsulation.getField(tested, "erlaubteOperationen");
+        erlaubteOperationen.clear();
+
+        Deencapsulation.invoke(tested, "randomOperation");
     }
 
 }
