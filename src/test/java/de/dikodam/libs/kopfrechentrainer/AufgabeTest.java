@@ -7,8 +7,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import java.util.function.BinaryOperator;
-
+import static de.dikodam.libs.kopfrechentrainer.ArithmeticOperation.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
@@ -23,20 +22,17 @@ public class AufgabeTest {
 
     @Before
     public void setUp() {
-        tested = new Aufgabe(6, 3, ArithmeticOperation.ADDITION);
+        tested = new Aufgabe(6, 3, ADDITION);
     }
 
     @Test
-    public void constructor() throws Exception {
-        Integer erstesArgument = Deencapsulation.getField(tested, "erstesArgument");
-        Integer zweitesArgument = Deencapsulation.getField(tested, "zweitesArgument");
-        BinaryOperator<Integer> operator = Deencapsulation.getField(tested, "operator");
-        Integer gerateneLoesung = Deencapsulation.getField(tested, "gerateneLoesung");
+    public void constructorAndGetters() throws Exception {
 
-        assertThat(erstesArgument, is(6));
-        assertThat(zweitesArgument, is(3));
-        assertThat(operator, is(ArithmeticOperation.ADDITION));
-        assertThat(gerateneLoesung, is(nullValue()));
+        assertThat(tested.getErstesArgument(), is(6));
+        assertThat(tested.getZweitesArgument(), is(3));
+        assertThat(tested.getOperator(), is(ArithmeticOperation.ADDITION));
+        // TODO wirklich public?
+        assertThat(tested.getGerateneLoesung(), is(nullValue()));
     }
 
     @Test
@@ -80,6 +76,14 @@ public class AufgabeTest {
         Deencapsulation.setField(tested, "gerateneLoesung", 9);
 
         assertThat(tested.korrektGeraten(), is(true));
+    }
+
+    @Test
+    public void testToString() {
+        assertThat(tested.toString(), is("6 + 3"));
+        assertThat(new Aufgabe(5, 8, SUBTRAKTION).toString(), is("5 - 8"));
+        assertThat(new Aufgabe(2, 3, MULTIPLIKATION).toString(), is("2 * 3"));
+        assertThat(new Aufgabe(2, 5, DIVISION).toString(), is("2 / 5"));
     }
 
 }
