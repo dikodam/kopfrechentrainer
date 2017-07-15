@@ -1,16 +1,23 @@
 package de.dikodam.libs.kopfrechentrainer;
 
+import java.util.function.BinaryOperator;
+
 public class KopfrechenTrainer {
+
+    private static final BinaryOperator<Integer> ADDITION = (a, b) -> a + b;
+    private static final BinaryOperator<Integer> SUBTRAKTION = (a, b) -> a - b;
+    private static final BinaryOperator<Integer> MULTIPLIKATION = (a, b) -> a * b;
+    private static final BinaryOperator<Integer> DIVISION = (a, b) -> a / b;
 
     private int minStellenanzahl1;
     private int minStellenanzahl2;
     private int maxStellenanzahl1;
     private int maxStellenanzahl2;
 
-    private boolean plusRechnen;
-    private boolean minusRechnen;
-    private boolean malRechnen;
-    private boolean geteiltRechnen;
+    private boolean additionRechnen;
+    private boolean subtraktionRechnen;
+    private boolean multiplikationRechnen;
+    private boolean divisionRechnen;
 
 
     public KopfrechenTrainer() {
@@ -19,16 +26,20 @@ public class KopfrechenTrainer {
         maxStellenanzahl1 = 2;
         maxStellenanzahl2 = 2;
 
-        plusRechnen = true;
-        minusRechnen = false;
-        malRechnen = false;
-        geteiltRechnen = false;
+        additionRechnen = true;
+        subtraktionRechnen = false;
+        multiplikationRechnen = false;
+        divisionRechnen = false;
     }
 
     public int getMinStellenanzahl1() {
         return minStellenanzahl1;
     }
 
+    /**
+     * @param minStellenanzahl1 neue minimale Stellenanzahl für 1. Argument
+     * @throws IllegalArgumentException für minStellenanzahl1 <= 0
+     */
     public void setMinStellenanzahl1(int minStellenanzahl1) {
         if (minStellenanzahl1 <= 0) {
             throw new IllegalArgumentException("Minimale Stellenanzahl (Argument 1) muss mindestens 1 sein!");
@@ -43,6 +54,10 @@ public class KopfrechenTrainer {
         return minStellenanzahl2;
     }
 
+    /**
+     * @param minStellenanzahl2 neue minimale Stellenanzahl für 2. Argument
+     * @throws IllegalArgumentException für minStellenanzahl2 <= 0
+     */
     public void setMinStellenanzahl2(int minStellenanzahl2) {
         if (minStellenanzahl2 <= 0) {
             throw new IllegalArgumentException("Minimale Stellenanzahl (Argument 2) muss mindestens 1 sein!");
@@ -57,6 +72,10 @@ public class KopfrechenTrainer {
         return maxStellenanzahl1;
     }
 
+    /**
+     * @param maxStellenanzahl1 neue maximale Stellenanzahl für 1. Argument
+     * @throws IllegalArgumentException für maxStellenanzahl1 <= 0
+     */
     public void setMaxStellenanzahl1(int maxStellenanzahl1) {
         if (maxStellenanzahl1 <= 0) {
             throw new IllegalArgumentException("Die maximale Stellenanzahl (Argument 1) muss mindestens 1 sein!");
@@ -73,8 +92,12 @@ public class KopfrechenTrainer {
         return maxStellenanzahl2;
     }
 
+    /**
+     * @param maxStellenanzahl2 neue maximale Stellenanzahl für 2. Argument
+     * @throws IllegalArgumentException wenn maxStellenanzahl <= 0
+     */
     public void setMaxStellenanzahl2(int maxStellenanzahl2) {
-        if(maxStellenanzahl2 <= 0) {
+        if (maxStellenanzahl2 <= 0) {
             throw new IllegalArgumentException("Die maximale Stellenanzahl (Argument 2) muss mindestens 1 sein!");
         }
 
@@ -85,36 +108,36 @@ public class KopfrechenTrainer {
         }
     }
 
-    public boolean isPlusRechnen() {
-        return plusRechnen;
+    public boolean isAdditionRechnen() {
+        return additionRechnen;
     }
 
-    public void setPlusRechnen(boolean plusRechnen) {
-        this.plusRechnen = plusRechnen;
+    public void setAdditionRechnen(boolean additionRechnen) {
+        this.additionRechnen = additionRechnen;
     }
 
-    public boolean isMinusRechnen() {
-        return minusRechnen;
+    public boolean isSubtraktionRechnen() {
+        return subtraktionRechnen;
     }
 
-    public void setMinusRechnen(boolean minusRechnen) {
-        this.minusRechnen = minusRechnen;
+    public void setSubtraktionRechnen(boolean subtraktionRechnen) {
+        this.subtraktionRechnen = subtraktionRechnen;
     }
 
-    public boolean isMalRechnen() {
-        return malRechnen;
+    public boolean isMultiplikationRechnen() {
+        return multiplikationRechnen;
     }
 
-    public void setMalRechnen(boolean malRechnen) {
-        this.malRechnen = malRechnen;
+    public void setMultiplikationRechnen(boolean multiplikationRechnen) {
+        this.multiplikationRechnen = multiplikationRechnen;
     }
 
-    public boolean isGeteiltRechnen() {
-        return geteiltRechnen;
+    public boolean isDivisionRechnen() {
+        return divisionRechnen;
     }
 
-    public void setGeteiltRechnen(boolean geteiltRechnen) {
-        this.geteiltRechnen = geteiltRechnen;
+    public void setDivisionRechnen(boolean divisionRechnen) {
+        this.divisionRechnen = divisionRechnen;
     }
 
 

@@ -6,6 +6,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
+import java.util.function.BinaryOperator;
 import java.util.function.Consumer;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -25,10 +26,10 @@ public class KopfrechenTrainerTest {
         assertThat(tested.getMinStellenanzahl2(), is(1));
         assertThat(tested.getMaxStellenanzahl1(), is(2));
         assertThat(tested.getMaxStellenanzahl2(), is(2));
-        assertThat(tested.isPlusRechnen(), is(true));
-        assertThat(tested.isMinusRechnen(), is(false));
-        assertThat(tested.isMalRechnen(), is(false));
-        assertThat(tested.isGeteiltRechnen(), is(false));
+        assertThat(tested.isAdditionRechnen(), is(true));
+        assertThat(tested.isSubtraktionRechnen(), is(false));
+        assertThat(tested.isMultiplikationRechnen(), is(false));
+        assertThat(tested.isDivisionRechnen(), is(false));
     }
 
     private void testMinMaxStellenanzahlAendern(String nameMinFeld, String nameMaxFeld, int minStellenVorher, int maxStellenVorher,
@@ -183,54 +184,70 @@ public class KopfrechenTrainerTest {
 
     @Test
     public void setPlusRechnenTrue() throws Exception {
-        Deencapsulation.setField(tested, "plusRechnen", false);
+        String feldName = "additionRechnen";
+        Deencapsulation.setField(tested, feldName, false);
 
-        tested.setPlusRechnen(true);
-        assertThat(Deencapsulation.getField(tested, "plusRechnen"), is(true));
+        tested.setAdditionRechnen(true);
+        assertThat(Deencapsulation.getField(tested, feldName), is(true));
 
-        tested.setPlusRechnen(false);
-        assertThat(Deencapsulation.getField(tested, "plusRechnen"), is(false));
+        tested.setAdditionRechnen(false);
+        assertThat(Deencapsulation.getField(tested, feldName), is(false));
     }
 
 
     @Test
     public void setMinusRechnen() throws Exception {
-        Deencapsulation.setField(tested, "minusRechnen", false);
+        String feldName = "subtraktionRechnen";
+        Deencapsulation.setField(tested, feldName, false);
 
-        tested.setMinusRechnen(true);
-        assertThat(Deencapsulation.getField(tested, "minusRechnen"), is(true));
+        tested.setSubtraktionRechnen(true);
+        assertThat(Deencapsulation.getField(tested, feldName), is(true));
 
-        tested.setMinusRechnen(false);
-        assertThat(Deencapsulation.getField(tested, "minusRechnen"), is(false));
+        tested.setSubtraktionRechnen(false);
+        assertThat(Deencapsulation.getField(tested, feldName), is(false));
     }
 
     @Test
     public void setMalRechnen() throws Exception {
-        Deencapsulation.setField(tested, "malRechnen", false);
+        String feldName = "multiplikationRechnen";
+        Deencapsulation.setField(tested, feldName, false);
 
-        tested.setMalRechnen(true);
-        assertThat(Deencapsulation.getField(tested, "malRechnen"), is(true));
+        tested.setMultiplikationRechnen(true);
+        assertThat(Deencapsulation.getField(tested, feldName), is(true));
 
-        tested.setMalRechnen(false);
-        assertThat(Deencapsulation.getField(tested, "malRechnen"), is(false));
+        tested.setMultiplikationRechnen(false);
+        assertThat(Deencapsulation.getField(tested, feldName), is(false));
     }
 
     @Test
     public void setGeteiltErlaubt() throws Exception {
-        Deencapsulation.setField(tested, "geteiltRechnen", false);
+        String feldName = "divisionRechnen";
+        Deencapsulation.setField(tested, feldName, false);
 
-        tested.setGeteiltRechnen(true);
-        assertThat(Deencapsulation.getField(tested, "geteiltRechnen"), is(true));
+        tested.setDivisionRechnen(true);
+        assertThat(Deencapsulation.getField(tested, feldName), is(true));
 
-        tested.setGeteiltRechnen(false);
-        assertThat(Deencapsulation.getField(tested, "geteiltRechnen"), is(false));
+        tested.setDivisionRechnen(false);
+        assertThat(Deencapsulation.getField(tested, feldName), is(false));
     }
 
+    @Test
+    public void operationen() {
+        BinaryOperator<Integer> addition = Deencapsulation.getField(KopfrechenTrainer.class, "ADDITION");
+        BinaryOperator<Integer> subtraktion = Deencapsulation.getField(KopfrechenTrainer.class, "SUBTRAKTION");
+        BinaryOperator<Integer> multiplikation = Deencapsulation.getField(KopfrechenTrainer.class, "MULTIPLIKATION");
+        BinaryOperator<Integer> division = Deencapsulation.getField(KopfrechenTrainer.class, "DIVISION");
+
+        assertThat(addition.apply(1, 2), is(3));
+        assertThat(subtraktion.apply(1, 2), is(-1));
+        assertThat(multiplikation.apply(3, 4), is(12));
+        assertThat(division.apply(12, 3), is(4));
+    }
 
 //    @Test
     //  public void go() throws Exception{
-    //    expectedException.expect(IllegalStateException.class);
-    //   // Fehlkonfiguration
+    //  expectedException.expect(IllegalStateException.class);
+    //  // Fehlkonfiguration
     //}
 
 }
