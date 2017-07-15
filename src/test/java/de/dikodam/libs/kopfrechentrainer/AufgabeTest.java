@@ -23,7 +23,7 @@ public class AufgabeTest {
 
     @Before
     public void setUp() {
-        tested = new Aufgabe(6, 3, Deencapsulation.getField(KopfrechenTrainer.class, "ADDITION"));
+        tested = new Aufgabe(6, 3, Operation.ADDITION);
     }
 
     @Test
@@ -32,11 +32,10 @@ public class AufgabeTest {
         Integer zweitesArgument = Deencapsulation.getField(tested, "zweitesArgument");
         BinaryOperator<Integer> operator = Deencapsulation.getField(tested, "operator");
         Integer gerateneLoesung = Deencapsulation.getField(tested, "gerateneLoesung");
-        BinaryOperator<Integer> addition = Deencapsulation.getField(KopfrechenTrainer.class, "ADDITION");
 
         assertThat(erstesArgument, is(6));
         assertThat(zweitesArgument, is(3));
-        assertThat(operator, is(addition));
+        assertThat(operator, is(Operation.ADDITION));
         assertThat(gerateneLoesung, is(nullValue()));
     }
 
