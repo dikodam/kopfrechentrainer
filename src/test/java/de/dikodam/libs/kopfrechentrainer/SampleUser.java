@@ -25,10 +25,8 @@ public class SampleUser {
 
         Consumer<Task> printWithResult = (task) -> System.out.println(String.format("%s = %d", task, task.getResult()));
 
-        Stream.generate(mmt::generateTask)
-            .limit(250)
+        mmt.generateTasks(250)
             .forEach(printWithResult);
-
     }
 
 }

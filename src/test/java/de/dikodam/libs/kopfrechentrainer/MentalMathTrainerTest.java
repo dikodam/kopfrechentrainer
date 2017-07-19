@@ -1,11 +1,11 @@
 package de.dikodam.libs.kopfrechentrainer;
 
 import mockit.*;
-import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
+import java.util.List;
 import java.util.Map;
 import java.util.function.BinaryOperator;
 import java.util.function.Consumer;
@@ -340,4 +340,18 @@ public class MentalMathTrainerTest {
         System.out.println(result == null);
     }
 
+    @Test
+    public void getTaks() {
+        List<Task> result = tested.generateTasks(200);
+
+        assertThat(result.size(), is(200));
+    }
+
+    @Test
+    public void getTaksIllegalArgumentException() {
+        expectedException.expect(IllegalArgumentException.class);
+        expectedException.expectMessage("Impossible to generate 0 tasks!");
+
+        tested.generateTasks(0);
+    }
 }

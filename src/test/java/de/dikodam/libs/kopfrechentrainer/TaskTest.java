@@ -83,4 +83,9 @@ public class TaskTest {
         assertThat(new Task(2, 5, DIVISION).toString(), is("2 / 5"));
     }
 
+    @Test
+    public void getResult() {
+        assertThat(tested.getResult(), is(9));
+    }
+
 }

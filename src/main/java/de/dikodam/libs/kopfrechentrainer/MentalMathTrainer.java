@@ -6,10 +6,13 @@ import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 import static de.dikodam.libs.kopfrechentrainer.ArithmeticOperation.*;
 
 public class MentalMathTrainer {
+
+    // TODO setOnlyAdditionEnabled etc.
 
     private Map<ArithmeticOperation, Boolean> enabledOperations;
 
@@ -202,4 +205,14 @@ public class MentalMathTrainer {
         return numerators.get(ThreadLocalRandom.current().nextInt(numerators.size()));
     }
 
+    public List<Task> generateTasks(int i) {
+
+        if (i <= 0) {
+            throw new IllegalArgumentException(String.format("Impossible to generate %d tasks!", i));
+        }
+
+        return Stream.generate(this::generateTask)
+            .limit(i)
+            .collect(Collectors.toList());
+    }
 }
