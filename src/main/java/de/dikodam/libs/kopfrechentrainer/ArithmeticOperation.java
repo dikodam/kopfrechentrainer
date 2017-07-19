@@ -7,7 +7,7 @@ import java.util.function.BinaryOperator;
 @FunctionalInterface
 public interface ArithmeticOperation extends BinaryOperator<Integer> {
     ArithmeticOperation ADDITION = (a, b) -> a + b;
-    ArithmeticOperation SUBTRAKTION = (a, b) -> a - b;
-    ArithmeticOperation MULTIPLIKATION = (a, b) -> a * b;
+    ArithmeticOperation SUBTRACTION = (a, b) -> a - b;
+    ArithmeticOperation MULTIPLICATION = (a, b) -> a * b;
     ArithmeticOperation DIVISION = (a, b) -> a / b;
 }

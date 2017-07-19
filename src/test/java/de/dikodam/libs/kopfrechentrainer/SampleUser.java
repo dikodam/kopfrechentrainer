@@ -11,28 +11,28 @@ public class SampleUser {
     @Ignore
     @Test
     public void main() {
-        KopfrechenTrainer krt = new KopfrechenTrainer();
+        MentalMathTrainer mmt = new MentalMathTrainer();
 
         // TODO fluent API?
         // overriding the default
-        krt.setMinStellenanzahl1(2);
-        krt.setMaxStellenanzahl1(3);
-        krt.setMinStellenanzahl2(2);
-        krt.setMaxStellenanzahl2(3);
-        krt.setAdditionErlaubt(true);
-        krt.setSubtraktionErlaubt(true);
-        krt.setMultiplikationErlaubt(true);
-        krt.setDivisionErlaubt(true);
+        mmt.setMinDigits2(2);
+        mmt.setMaxDigits1(3);
+        mmt.setMinDigits2(2);
+        mmt.setMaxDigits2(3);
+        mmt.setAdditionEligible(true);
+        mmt.setSubtraktionEligible(true);
+        mmt.setMultiplikationEligible(true);
+        mmt.setDivisionEligible(true);
 
-        Consumer<Aufgabe> ausgabeMitErgebnis = (aufgabe) -> {
-            Integer result = aufgabe.getOperator()
-                .apply(aufgabe.getErstesArgument(), aufgabe.getZweitesArgument());
-            System.out.println(String.format("%s = %d", aufgabe, result));
+        Consumer<Task> printWithResult = (task) -> {
+            Integer result = task.getOperator()
+                .apply(task.getFirstArgument(), task.getSecondArgument());
+            System.out.println(String.format("%s = %d", task, result));
         };
 
-        Stream.generate(krt::produceAufgabe)
+        Stream.generate(mmt::generateTask)
             .limit(250)
-            .forEach(ausgabeMitErgebnis);
+            .forEach(printWithResult);
 
     }
 
