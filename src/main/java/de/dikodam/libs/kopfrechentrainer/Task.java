@@ -14,6 +14,7 @@ public class Task {
         this.secondArgument = secondArgument;
         this.operator = operator;
         guessedResult = null;
+        // TODO compute actual result
     }
 
     public boolean guess(int result) {

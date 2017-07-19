@@ -1,8 +1,6 @@
 package de.dikodam.libs.kopfrechentrainer;
 
-import mockit.Deencapsulation;
-import mockit.Expectations;
-import mockit.Tested;
+import mockit.*;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -10,6 +8,7 @@ import org.junit.rules.ExpectedException;
 import java.util.Map;
 import java.util.function.BinaryOperator;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
@@ -31,29 +30,31 @@ public class MentalMathTrainerTest {
         assertThat(tested.getMinDigits2(), is(1));
         assertThat(tested.getMaxDigits1(), is(2));
         assertThat(tested.getMaxDigits2(), is(2));
-        assertThat(tested.isAdditionEligible(), is(true));
-        assertThat(tested.isSubtractionEligible(), is(false));
-        assertThat(tested.isMultiplicationEligible(), is(false));
-        assertThat(tested.isDivisionEligible(), is(false));
+        assertThat(tested.isAdditionEnabled(), is(true));
+        assertThat(tested.isSubtractionEnabled(), is(false));
+        assertThat(tested.isMultiplicationEnabled(), is(false));
+        assertThat(tested.isDivisionEnabled(), is(false));
     }
 
-    private void testChangeMinMaxDigits(String nameMinField, String nameMaxField, int minDigitsBefore, int maxDigitsBefore,
-                                        int newValue, Consumer<Integer> testcode, int minDigitsAfter, int maxDigitsAfter) {
+    private void testSetter(String nameMinField, String nameMaxField, int minDigitsBefore, int maxDigitsBefore,
+                            int newValue, Function<Integer, MentalMathTrainer> testcode, int minDigitsAfter, int maxDigitsAfter) {
         Deencapsulation.setField(tested, nameMinField, minDigitsBefore);
         Deencapsulation.setField(tested, nameMaxField, maxDigitsBefore);
 
-        testcode.accept(newValue);
+        MentalMathTrainer returnedMMT = testcode.apply(newValue);
 
         Integer minDigits = Deencapsulation.getField(tested, nameMinField);
         Integer maxDigits = Deencapsulation.getField(tested, nameMaxField);
 
         assertThat(minDigits, is(minDigitsAfter));
         assertThat(maxDigits, is(maxDigitsAfter));
+
+        assertThat(returnedMMT, is(tested));
     }
 
     @Test
     public void setMinDigits_1_NoMaxAdjustment() throws Exception {
-        testChangeMinMaxDigits(
+        testSetter(
             "minDigits1",
             "maxDigits1",
             2,
@@ -66,7 +67,7 @@ public class MentalMathTrainerTest {
 
     @Test
     public void setMinDigits_1_WithMaxAdjustment() throws Exception {
-        testChangeMinMaxDigits(
+        testSetter(
             "minDigits1",
             "maxDigits1",
             1,
@@ -79,7 +80,7 @@ public class MentalMathTrainerTest {
 
     @Test
     public void setMinDigits_2_WithoutMaxAdjustment() throws Exception {
-        testChangeMinMaxDigits(
+        testSetter(
             "minDigits2",
             "maxDigits2",
             3,
@@ -92,7 +93,7 @@ public class MentalMathTrainerTest {
 
     @Test
     public void setMinDigits_2_WithMaxAdjustment() throws Exception {
-        testChangeMinMaxDigits(
+        testSetter(
             "minDigits2",
             "maxDigits2",
             3,
@@ -121,7 +122,7 @@ public class MentalMathTrainerTest {
 
     @Test
     public void setMaxDigits_1_WithoutMinAdjustment() throws Exception {
-        testChangeMinMaxDigits(
+        testSetter(
             "minDigits1",
             "maxDigits1",
             1,
@@ -134,7 +135,7 @@ public class MentalMathTrainerTest {
 
     @Test
     public void setMaxDigits_1_WithMinAdjustment() throws Exception {
-        testChangeMinMaxDigits(
+        testSetter(
             "minDigits1",
             "maxDigits1",
             3,
@@ -155,7 +156,7 @@ public class MentalMathTrainerTest {
 
     @Test
     public void setMaxDigits_2_WithoutMinAdjustment() throws Exception {
-        testChangeMinMaxDigits(
+        testSetter(
             "minDigits2",
             "maxDigits2",
             2,
@@ -168,7 +169,7 @@ public class MentalMathTrainerTest {
 
     @Test
     public void setMaxDigits_2_WithMinAdjustment() throws Exception {
-        testChangeMinMaxDigits(
+        testSetter(
             "minDigits2",
             "maxDigits2",
             4,
@@ -188,70 +189,85 @@ public class MentalMathTrainerTest {
     }
 
     @Test
-    public void setAdditionEligible() throws Exception {
-        Map<BinaryOperator<Integer>, Boolean> eligibleeOperationen = Deencapsulation.getField(tested, "eligibleOperations");
+    public void setAdditionEnabled() throws Exception {
+        Map<BinaryOperator<Integer>, Boolean> enabledeOperationen = Deencapsulation.getField(tested, "enabledOperations");
 
-        tested.setAdditionEligible(true);
-        assertThat(eligibleeOperationen.get(ADDITION), is(true));
+        MentalMathTrainer returnedMMT = tested.setAdditionEnabled(true);
+        assertThat(enabledeOperationen.get(ADDITION), is(true));
+        assertThat(returnedMMT, is(tested));
 
-        tested.setAdditionEligible(false);
-        assertThat(eligibleeOperationen.get(ADDITION), is(false));
+        returnedMMT = tested.setAdditionEnabled(false);
+        assertThat(enabledeOperationen.get(ADDITION), is(false));
+        assertThat(returnedMMT, is(tested));
     }
 
 
     @Test
-    public void setSubtractionEligible() throws Exception {
-        Map<BinaryOperator<Integer>, Boolean> eligibleOperations = Deencapsulation.getField(tested, "eligibleOperations");
+    public void setSubtractionEnabled() throws Exception {
+        Map<BinaryOperator<Integer>, Boolean> enabledOperations = Deencapsulation.getField(tested, "enabledOperations");
 
-        tested.setSubtraktionEligible(true);
-        assertThat(eligibleOperations.get(SUBTRACTION), is(true));
+        tested.setSubtractionEnabled(true);
+        assertThat(enabledOperations.get(SUBTRACTION), is(true));
 
-        tested.setSubtraktionEligible(false);
-        assertThat(eligibleOperations.get(SUBTRACTION), is(false));
+        tested.setSubtractionEnabled(false);
+        assertThat(enabledOperations.get(SUBTRACTION), is(false));
     }
 
     @Test
-    public void setMultiplicationEligible() throws Exception {
-        Map<BinaryOperator<Integer>, Boolean> eligibleOperations = Deencapsulation.getField(tested, "eligibleOperations");
-        tested.setMultiplikationEligible(true);
-        assertThat(eligibleOperations.get(MULTIPLICATION), is(true));
+    public void setMultiplicationEnabled() throws Exception {
+        Map<BinaryOperator<Integer>, Boolean> enabledOperations = Deencapsulation.getField(tested, "enabledOperations");
+        tested.setMultiplikationEnabled(true);
+        assertThat(enabledOperations.get(MULTIPLICATION), is(true));
 
-        tested.setMultiplikationEligible(false);
-        assertThat(eligibleOperations.get(MULTIPLICATION), is(false));
+        tested.setMultiplikationEnabled(false);
+        assertThat(enabledOperations.get(MULTIPLICATION), is(false));
     }
 
     @Test
-    public void setDivisionEligible() throws Exception {
-        Map<BinaryOperator<Integer>, Boolean> eligibleOperations = Deencapsulation.getField(tested, "eligibleOperations");
+    public void setDivisionEnabled() throws Exception {
+        Map<BinaryOperator<Integer>, Boolean> enabledOperations = Deencapsulation.getField(tested, "enabledOperations");
 
-        tested.setDivisionEligible(true);
-        assertThat(eligibleOperations.get(DIVISION), is(true));
+        tested.setDivisionEnabled(true);
+        assertThat(enabledOperations.get(DIVISION), is(true));
 
-        tested.setDivisionEligible(false);
-        assertThat(eligibleOperations.get(DIVISION), is(false));
+        tested.setDivisionEnabled(false);
+        assertThat(enabledOperations.get(DIVISION), is(false));
     }
 
     @Test
     public void generateTask() {
-        new Expectations(tested) {
-            {
-                Deencapsulation.invoke(tested, "getRandomOperation");
-                result = SUBTRACTION;
-            }
-        };
 
         Deencapsulation.setField(tested, "minDigits1", 3);
         Deencapsulation.setField(tested, "maxDigits1", 4);
         Deencapsulation.setField(tested, "minDigits2", 2);
         Deencapsulation.setField(tested, "maxDigits2", 3);
 
+        new MockUp<MentalMathTrainer>() {
+            @Mock
+            private ArithmeticOperation getRandomOperation() {
+                return SUBTRACTION;
+            }
+
+            @Mock
+            private int generateArgumentBetween(int inclusiveLowerBound, int exclusiveUpperBound) {
+                if (inclusiveLowerBound == 10 && exclusiveUpperBound == 1000) {
+                    return 125;
+                }
+                if (inclusiveLowerBound == 100 && exclusiveUpperBound == 10000) {
+                    return 568;
+                }
+                throw new AssertionError(String.format(
+                    "Unexpected method call with parameters %d and %d", inclusiveLowerBound, exclusiveUpperBound));
+            }
+        };
+
 
         Task result = tested.generateTask();
         Integer resultArg1 = Deencapsulation.getField(result, "firstArgument");
-        assertThat(resultArg1, allOf(is(greaterThanOrEqualTo(100)), is(lessThanOrEqualTo(9999))));
+        assertThat(resultArg1, is(568));
 
         Integer resultArg2 = Deencapsulation.getField(result, "secondArgument");
-        assertThat(resultArg2, allOf(is(greaterThanOrEqualTo(10)), is(lessThanOrEqualTo(999))));
+        assertThat(resultArg2, is(125));
 
         ArithmeticOperation resultOperation = Deencapsulation.getField(result, "operator");
         assertThat(resultOperation, is(SUBTRACTION));
@@ -273,23 +289,23 @@ public class MentalMathTrainerTest {
             System.out.println("DIVISION: " + DIVISION);
         */
         // 1. Test
-        Map<ArithmeticOperation, Boolean> eligibleOperations = Deencapsulation.getField(tested, "eligibleOperations");
-        eligibleOperations.clear();
-        eligibleOperations.put(ADDITION, true);
-        eligibleOperations.put(SUBTRACTION, false);
-        eligibleOperations.put(MULTIPLICATION, false);
-        eligibleOperations.put(DIVISION, true);
+        Map<ArithmeticOperation, Boolean> enabledOperations = Deencapsulation.getField(tested, "enabledOperations");
+        enabledOperations.clear();
+        enabledOperations.put(ADDITION, true);
+        enabledOperations.put(SUBTRACTION, false);
+        enabledOperations.put(MULTIPLICATION, false);
+        enabledOperations.put(DIVISION, true);
 
         Stream.generate(testedMethod)
             .limit(100)
             .forEach(validateAdditionAndDivision);
 
         // 2. Test
-        eligibleOperations.clear();
-        eligibleOperations.put(ADDITION, true);
-        eligibleOperations.put(SUBTRACTION, true);
-        eligibleOperations.put(MULTIPLICATION, false);
-        eligibleOperations.put(DIVISION, false);
+        enabledOperations.clear();
+        enabledOperations.put(ADDITION, true);
+        enabledOperations.put(SUBTRACTION, true);
+        enabledOperations.put(MULTIPLICATION, false);
+        enabledOperations.put(DIVISION, false);
 
         Stream.generate(testedMethod)
             .limit(100)
@@ -297,12 +313,12 @@ public class MentalMathTrainerTest {
     }
 
     @Test
-    public void randomOperationNoneEligibleException() {
+    public void randomOperationNoneEnabledException() {
         expectedException.expect(IllegalStateException.class);
-        expectedException.expectMessage("No arithmetic operations are set to eligible!");
+        expectedException.expectMessage("No arithmetic operations are enabled!");
 
-        Map<ArithmeticOperation, Boolean> eligibleOperations = Deencapsulation.getField(tested, "eligibleOperations");
-        eligibleOperations.clear();
+        Map<ArithmeticOperation, Boolean> enabledOperations = Deencapsulation.getField(tested, "enabledOperations");
+        enabledOperations.clear();
 
         Deencapsulation.invoke(tested, "getRandomOperation");
     }

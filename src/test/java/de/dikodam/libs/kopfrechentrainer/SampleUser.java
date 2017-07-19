@@ -13,16 +13,15 @@ public class SampleUser {
     public void main() {
         MentalMathTrainer mmt = new MentalMathTrainer();
 
-        // TODO fluent API?
         // overriding the default
-        mmt.setMinDigits2(2);
-        mmt.setMaxDigits1(3);
-        mmt.setMinDigits2(2);
-        mmt.setMaxDigits2(3);
-        mmt.setAdditionEligible(true);
-        mmt.setSubtraktionEligible(true);
-        mmt.setMultiplikationEligible(true);
-        mmt.setDivisionEligible(true);
+        mmt.setMinDigits2(2)
+            .setMaxDigits1(3)
+            .setMinDigits2(2)
+            .setMaxDigits2(3)
+            .setAdditionEnabled(true)
+            .setSubtractionEnabled(true)
+            .setMultiplikationEnabled(true)
+            .setDivisionEnabled(true);
 
         Consumer<Task> printWithResult = (task) -> {
             Integer result = task.getOperator()

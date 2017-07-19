@@ -10,7 +10,7 @@ import static de.dikodam.libs.kopfrechentrainer.ArithmeticOperation.*;
 
 public class MentalMathTrainer {
 
-    private Map<ArithmeticOperation, Boolean> eligibleOperations;
+    private Map<ArithmeticOperation, Boolean> enabledOperations;
 
     private int minDigits1;
     private int minDigits2;
@@ -23,11 +23,11 @@ public class MentalMathTrainer {
         maxDigits1 = 2;
         maxDigits2 = 2;
 
-        eligibleOperations = new HashMap<>();
-        eligibleOperations.put(ADDITION, true);
-        eligibleOperations.put(SUBTRACTION, false);
-        eligibleOperations.put(MULTIPLICATION, false);
-        eligibleOperations.put(DIVISION, false);
+        enabledOperations = new HashMap<>();
+        enabledOperations.put(ADDITION, true);
+        enabledOperations.put(SUBTRACTION, false);
+        enabledOperations.put(MULTIPLICATION, false);
+        enabledOperations.put(DIVISION, false);
     }
 
     public int getMinDigits1() {
@@ -38,7 +38,7 @@ public class MentalMathTrainer {
      * @param newMinDigits1 neue minimale Stellenanzahl für 1. Argument
      * @throws IllegalArgumentException für minStellenanzahl1 <= 0
      */
-    public void setMinDigits1(int newMinDigits1) {
+    public MentalMathTrainer setMinDigits1(int newMinDigits1) {
         if (newMinDigits1 <= 0) {
             throw new IllegalArgumentException("Digits minimum for argument 1 has to be at least 1!");
         }
@@ -46,6 +46,7 @@ public class MentalMathTrainer {
         if (maxDigits1 < newMinDigits1) {
             maxDigits1 = newMinDigits1;
         }
+        return this;
     }
 
     public int getMinDigits2() {
@@ -56,7 +57,7 @@ public class MentalMathTrainer {
      * @param newMinDigits2 neue minimale Stellenanzahl für 2. Argument
      * @throws IllegalArgumentException für newMinDigits2 <= 0
      */
-    public void setMinDigits2(int newMinDigits2) {
+    public MentalMathTrainer setMinDigits2(int newMinDigits2) {
         if (newMinDigits2 <= 0) {
             throw new IllegalArgumentException("Digits minimum for argument 2 has to be at least 1!");
         }
@@ -64,6 +65,7 @@ public class MentalMathTrainer {
         if (maxDigits2 < newMinDigits2) {
             maxDigits2 = newMinDigits2;
         }
+        return this;
     }
 
     public int getMaxDigits1() {
@@ -74,7 +76,7 @@ public class MentalMathTrainer {
      * @param newMaxDigits1 neue maximale Stellenanzahl für 1. Argument
      * @throws IllegalArgumentException für newMaxDigits1 <= 0
      */
-    public void setMaxDigits1(int newMaxDigits1) {
+    public MentalMathTrainer setMaxDigits1(int newMaxDigits1) {
         if (newMaxDigits1 <= 0) {
             throw new IllegalArgumentException("Digits maximum for argument 1 has to be at least 1!");
         }
@@ -84,6 +86,7 @@ public class MentalMathTrainer {
         if (minDigits1 > newMaxDigits1) {
             minDigits1 = newMaxDigits1;
         }
+        return this;
     }
 
     public int getMaxDigits2() {
@@ -94,7 +97,7 @@ public class MentalMathTrainer {
      * @param newMaxDigits2 neue maximale Stellenanzahl für 2. Argument
      * @throws IllegalArgumentException wenn maxStellenanzahl <= 0
      */
-    public void setMaxDigits2(int newMaxDigits2) {
+    public MentalMathTrainer setMaxDigits2(int newMaxDigits2) {
         if (newMaxDigits2 <= 0) {
             throw new IllegalArgumentException("Digits maximum for argument 2 has to be at least 1!");
         }
@@ -104,60 +107,90 @@ public class MentalMathTrainer {
         if (minDigits2 > newMaxDigits2) {
             minDigits2 = newMaxDigits2;
         }
+        return this;
     }
 
-    public boolean isAdditionEligible() {
-        return eligibleOperations.get(ADDITION);
+    public boolean isAdditionEnabled() {
+        return enabledOperations.get(ADDITION);
     }
 
-    public void setAdditionEligible(boolean additionEligible) {
-        eligibleOperations.put(ADDITION, additionEligible);
+    public MentalMathTrainer setAdditionEnabled(boolean additionEnabled) {
+        enabledOperations.put(ADDITION, additionEnabled);
+        return this;
     }
 
-    public boolean isSubtractionEligible() {
-        return eligibleOperations.get(SUBTRACTION);
+    public boolean isSubtractionEnabled() {
+        return enabledOperations.get(SUBTRACTION);
     }
 
-    public void setSubtraktionEligible(boolean subtraktionEligible) {
-        eligibleOperations.put(SUBTRACTION, subtraktionEligible);
+    public MentalMathTrainer setSubtractionEnabled(boolean subtraktionEnabled) {
+        enabledOperations.put(SUBTRACTION, subtraktionEnabled);
+        return this;
     }
 
-    public boolean isMultiplicationEligible() {
-        return eligibleOperations.get(MULTIPLICATION);
+    public boolean isMultiplicationEnabled() {
+        return enabledOperations.get(MULTIPLICATION);
     }
 
-    public void setMultiplikationEligible(boolean multiplikationEligible) {
-        eligibleOperations.put(MULTIPLICATION, multiplikationEligible);
+    public MentalMathTrainer setMultiplikationEnabled(boolean multiplikationEnabled) {
+        enabledOperations.put(MULTIPLICATION, multiplikationEnabled);
+        return this;
     }
 
-    public boolean isDivisionEligible() {
-        return eligibleOperations.get(DIVISION);
+    public boolean isDivisionEnabled() {
+        return enabledOperations.get(DIVISION);
     }
 
-    public void setDivisionEligible(boolean divisionEligible) {
-        eligibleOperations.put(DIVISION, divisionEligible);
+    public MentalMathTrainer setDivisionEnabled(boolean divisionEnabled) {
+        enabledOperations.put(DIVISION, divisionEnabled);
+        return this;
     }
 
     public Task generateTask() {
-        // TODO nur ganzzahlige division
-        ThreadLocalRandom rand = ThreadLocalRandom.current();
-        int firstArgument = rand.nextInt((int) Math.pow(10, minDigits1 - 1), (int) Math.pow(10, maxDigits1));
-        int secondArgument = rand.nextInt((int) Math.pow(10, minDigits2 - 1), (int) Math.pow(10, maxDigits2));
-        return new Task(firstArgument, secondArgument, getRandomOperation());
+        ArithmeticOperation randomOperation = getRandomOperation();
+
+        int arg1LowerBound = (int) Math.pow(10, minDigits1 - 1);
+        int arg1UpperBound = (int) Math.pow(10, maxDigits1);
+        int arg2LowerBound = (int) Math.pow(10, minDigits2 - 1);
+        int arg2UpperBound = (int) Math.pow(10, maxDigits2);
+
+        int firstArgument;
+        int secondArgument = generateArgumentBetween(arg2LowerBound, arg2UpperBound);
+
+        if (randomOperation == ArithmeticOperation.DIVISION) {
+            // numerator / denominator
+            firstArgument = generateNumeratorFor(secondArgument);
+        } else {
+            firstArgument = generateArgumentBetween(arg1LowerBound, arg1UpperBound);
+        }
+
+        return new Task(firstArgument, secondArgument, randomOperation);
     }
 
     private ArithmeticOperation getRandomOperation() {
-        List<ArithmeticOperation> eligibleOps = eligibleOperations
+        List<ArithmeticOperation> enabledOps = enabledOperations
             .entrySet()
             .stream()
             .filter(Map.Entry::getValue)
             .map(Map.Entry::getKey)
             .collect(Collectors.toList());
-        if (eligibleOps.isEmpty()) {
-            throw new IllegalStateException("No arithmetic operations are set to eligible!");
+        if (enabledOps.isEmpty()) {
+            throw new IllegalStateException("No arithmetic operations are enabled!");
         }
-        return eligibleOps.get(ThreadLocalRandom.current()
-            .nextInt(eligibleOps.size()));
+        return enabledOps.get(ThreadLocalRandom.current().nextInt(enabledOps.size()));
     }
+
+    private int generateArgumentBetween(int inclusiveLowerBound, int exclusiveUpperBound) {
+        return ThreadLocalRandom.current().nextInt(inclusiveLowerBound, exclusiveUpperBound);
+    }
+
+    private int generateNumeratorFor(int denominator) {
+        // alle zahlen zwischen [denominator; obergrenze]
+        // alles nicht-vielfachen rausschmeißen
+        // vielfache: zahl % denominator == 0
+        // eine zufällig wählen
+        // wenn keine da: illegal argument ?
+        return 0;
+}
 
 }
