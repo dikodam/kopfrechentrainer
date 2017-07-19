@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import static de.dikodam.libs.kopfrechentrainer.ArithmeticOperation.*;
 
@@ -146,6 +147,7 @@ public class MentalMathTrainer {
         return this;
     }
 
+    // TODO choose new denominator if no nominator exists?
     public Task generateTask() {
         ArithmeticOperation randomOperation = getRandomOperation();
 
@@ -159,7 +161,7 @@ public class MentalMathTrainer {
 
         if (randomOperation == ArithmeticOperation.DIVISION) {
             // numerator / denominator
-            firstArgument = generateNumeratorFor(secondArgument);
+            firstArgument = generateNumeratorFor(secondArgument, arg2UpperBound);
         } else {
             firstArgument = generateArgumentBetween(arg1LowerBound, arg1UpperBound);
         }
@@ -184,13 +186,20 @@ public class MentalMathTrainer {
         return ThreadLocalRandom.current().nextInt(inclusiveLowerBound, exclusiveUpperBound);
     }
 
-    private int generateNumeratorFor(int denominator) {
-        // alle zahlen zwischen [denominator; obergrenze]
-        // alles nicht-vielfachen rausschmeißen
-        // vielfache: zahl % denominator == 0
+    private int generateNumeratorFor(int denominator, int exclusiveUpperBound) {
         // eine zufällig wählen
         // wenn keine da: illegal argument ?
-        return 0;
-}
+        List<Integer> numerators = IntStream.range(denominator + 1, exclusiveUpperBound)
+            .filter((number) -> number % denominator == 0)
+            .boxed()
+            .collect(Collectors.toList());
+
+        if (numerators.isEmpty()) {
+            throw new IllegalArgumentException(String.format("The denominator %d has no multiples in the range ]%d; %d]!",
+                denominator, denominator, exclusiveUpperBound - 1));
+        }
+
+        return numerators.get(ThreadLocalRandom.current().nextInt(numerators.size()));
+    }
 
 }

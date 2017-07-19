@@ -1,6 +1,7 @@
 package de.dikodam.libs.kopfrechentrainer;
 
 import mockit.*;
+import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -321,6 +322,22 @@ public class MentalMathTrainerTest {
         enabledOperations.clear();
 
         Deencapsulation.invoke(tested, "getRandomOperation");
+    }
+
+    @Test
+    public void generateNumberForDenominator() throws Exception {
+        int result = Deencapsulation.invoke(tested, "generateNumeratorFor", 2, 11);
+
+        assertThat(result, anyOf(is(4), is(6), is(8), is(10)));
+    }
+
+    @Test
+    public void generateNumberForDenominatorNoValidException() throws Exception {
+        expectedException.expect(IllegalArgumentException.class);
+        expectedException.expectMessage("The denominator 245 has no multiples in the range ]245; 299]!");
+
+        Integer result = Deencapsulation.invoke(tested, "generateNumeratorFor", 245, 300);
+        System.out.println(result == null);
     }
 
 }
