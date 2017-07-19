@@ -5,6 +5,7 @@ public class Task {
     private final int firstArgument;
     private final int secondArgument;
     private final ArithmeticOperation operator;
+    private final int result;
     private Integer guessedResult;
 
     public Task(int firstArgument, int secondArgument, ArithmeticOperation operator) {
@@ -12,7 +13,7 @@ public class Task {
         this.secondArgument = secondArgument;
         this.operator = operator;
         guessedResult = null;
-        // TODO compute actual result
+        result = operator.apply(firstArgument, secondArgument);
     }
 
     public boolean guess(int result) {
@@ -50,5 +51,9 @@ public class Task {
     @Override
     public String toString() {
         return operator.print(firstArgument, secondArgument);
+    }
+
+    public int getResult() {
+        return result;
     }
 }

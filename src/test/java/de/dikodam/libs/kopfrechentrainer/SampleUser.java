@@ -20,14 +20,10 @@ public class SampleUser {
             .setMaxDigits2(3)
             .setAdditionEnabled(true)
             .setSubtractionEnabled(true)
-            .setMultiplikationEnabled(true)
-            .setDivisionEnabled(true);
+            .setMultiplikationEnabled(true);
+            //.setDivisionEnabled(false);
 
-        Consumer<Task> printWithResult = (task) -> {
-            Integer result = task.getOperator()
-                .apply(task.getFirstArgument(), task.getSecondArgument());
-            System.out.println(String.format("%s = %d", task, result));
-        };
+        Consumer<Task> printWithResult = (task) -> System.out.println(String.format("%s = %d", task, task.getResult()));
 
         Stream.generate(mmt::generateTask)
             .limit(250)
