@@ -1,7 +1,5 @@
 package de.dikodam.libs.kopfrechentrainer;
 
-import static de.dikodam.libs.kopfrechentrainer.ArithmeticOperation.*;
-
 public class Task {
 
     private final int firstArgument;
@@ -51,16 +49,6 @@ public class Task {
 
     @Override
     public String toString() {
-        String operatorString = "??";
-        if (operator == ADDITION) {
-            operatorString = "+";
-        } else if (operator == SUBTRACTION) {
-            operatorString = "-";
-        } else if (operator == MULTIPLICATION) {
-            operatorString = "*";
-        } else if (operator == DIVISION) {
-            operatorString = "/";
-        }
-        return String.format("%s %s %s", firstArgument, operatorString, secondArgument);
+        return operator.print(firstArgument, secondArgument);
     }
 }

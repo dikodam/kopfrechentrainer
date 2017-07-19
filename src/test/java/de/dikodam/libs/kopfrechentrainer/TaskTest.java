@@ -54,19 +54,16 @@ public class TaskTest {
     }
 
     @Test
-    public void guessMoreThanOnceException() {
+    public void guessWasTried_and_MoreThanOneGuessException() {
+        assertThat(tested.guessWasTried(), is(false));
+
+        tested.guess(5);
+        assertThat(tested.guessWasTried(), is(true));
+
         expectedException.expect(IllegalStateException.class);
         expectedException.expectMessage("You're only allowed to guess once!");
 
-        tested.guess(5);
         tested.guess(8);
-    }
-
-    @Test
-    public void guessWasTried() {
-        assertThat(tested.guessWasTried(), is(false));
-        tested.guess(5);
-        assertThat(tested.guessWasTried(), is(true));
     }
 
     @Test
@@ -80,7 +77,7 @@ public class TaskTest {
 
     @Test
     public void testToString() {
-        assertThat(tested.toString(), is("6 + 3"));
+        assertThat(new Task(6, 3, ADDITION).toString(), is("6 + 3"));
         assertThat(new Task(5, 8, SUBTRACTION).toString(), is("5 - 8"));
         assertThat(new Task(2, 3, MULTIPLICATION).toString(), is("2 * 3"));
         assertThat(new Task(2, 5, DIVISION).toString(), is("2 / 5"));

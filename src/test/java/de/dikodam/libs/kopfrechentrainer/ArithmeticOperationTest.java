@@ -16,4 +16,12 @@ public class ArithmeticOperationTest {
         assertThat(DIVISION.apply(12, 3), is(4));
     }
 
+    @Test
+    public void print() {
+        assertThat(ADDITION.print(1,2), is("1 + 2"));
+        assertThat(SUBTRACTION.print(1,2), is("1 - 2"));
+        assertThat(MULTIPLICATION.print(1,2), is("1 * 2"));
+        assertThat(DIVISION.print(1,2), is("1 / 2"));
+    }
+
 }
